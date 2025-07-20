@@ -1,0 +1,27 @@
+const messages = [...document.querySelectorAll("div.message-in")];
+
+const data = messages.map((msg) => {
+  const name = msg.querySelector("._ahxy")?.textContent || null;
+  const phone = msg.querySelector("._ahx_")?.textContent || null;
+  const text = msg.querySelector("span.selectable-text")?.innerText || null;
+  const time = msg.querySelector('span[aria-hidden="true"] span')?.innerText || null;
+
+  const mediaImages = [...msg.querySelectorAll("img")].map((img) => img.src).filter(src =>
+    src.startsWith("data:image") || src.startsWith("blob:")
+  );
+
+  // REACTIONS 🎯
+  const reactionImgs = [...msg.querySelectorAll('button[aria-label*="Reactions"] img')];
+  const reactions = reactionImgs.map(img => img.alt).filter(Boolean);
+
+  return {
+    sender: name,
+    phone,
+    text,
+    time,
+    media: mediaImages,
+    reactions
+  };
+});
+
+console.log(data);
