@@ -1,0 +1,45 @@
+const messages = [];
+const messageNodes = document.querySelectorAll('.message-in, .message-out');
+
+messageNodes.forEach(node => {
+  const senderSpan = node.querySelector('._ahxy');
+  const sender = senderSpan ? senderSpan.innerText.trim() : null;
+
+  const phoneSpan = node.querySelector('._ahx_');
+  const phone = phoneSpan ? phoneSpan.innerText.trim() : null;
+
+  // Text message with emoji support
+  const textSpan = node.querySelector('._akbu span.selectable-text');
+  let text = '';
+  if (textSpan) {
+    text = Array.from(textSpan.childNodes)
+      .map(n => n.alt || n.textContent || '')
+      .join('');
+  }
+
+  const timeSpan = node.querySelector('span.x1rg5ohu, .x1c4vz4f.x2lah0s');
+  const timestamp = timeSpan ? timeSpan.innerText.trim() : null;
+
+  // Look for image or video media
+  const media = [];
+  const mediaImgs = node.querySelectorAll('img[src^="data:image"], img[src^="blob:"], img[src^="https://"], video');
+
+  mediaImgs.forEach(m => {
+    if (m.src) {
+      media.push(m.src);
+    }
+  });
+
+  // Push the collected data
+  if (text || media.length || sender || phone || timestamp) {
+    messages.push({
+      sender,
+      phone,
+      text,
+      media,
+      timestamp
+    });
+  }
+});
+
+console.log(JSON.stringify(messages, null, 2));
