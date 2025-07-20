@@ -1,0 +1,37 @@
+const messages = [];
+const messageNodes = document.querySelectorAll('.message-in, .message-out');
+
+messageNodes.forEach(node => {
+  // Get sender name
+  const senderSpan = node.querySelector('._ahxy');
+  const sender = senderSpan ? senderSpan.innerText.trim() : null;
+
+  // Get phone number
+  const phoneSpan = node.querySelector('._ahx_');
+  const phone = phoneSpan ? phoneSpan.innerText.trim() : null;
+
+  // Get message text (including emojis)
+  const textSpan = node.querySelector('._akbu span.selectable-text');
+  let text = '';
+  if (textSpan) {
+    text = Array.from(textSpan.childNodes)
+      .map(n => n.alt || n.textContent || '')
+      .join('');
+  }
+
+  // Get timestamp
+  const timeSpan = node.querySelector('span.x1rg5ohu, .x1c4vz4f.x2lah0s');
+  const timestamp = timeSpan ? timeSpan.innerText.trim() : null;
+
+  // Push the data
+  if (text || sender || phone || timestamp) {
+    messages.push({
+      sender,
+      phone,
+      text,
+      timestamp
+    });
+  }
+});
+
+console.log(JSON.stringify(messages, null, 2));
